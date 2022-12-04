@@ -1,0 +1,29 @@
+[package]
+name = "wag"
+authors = ["just-do-halee <just.do.halee@gmail.com>"]
+version = "0.1.0"
+edition = "2021"
+categories = ["asynchronous", "concurrency", "synchronization", "rust-patterns"]
+keywords = ["sync", "async", "wait", "waitgroup", "wake"]
+description = "Go like sync.WaitGroup implementation in Rust. (sync/async)"
+homepage = "https://github.com/just-do-halee/wag"
+repository = "https://github.com/just-do-halee/wag.git"
+documentation = "https://docs.rs/wag"
+license = "MIT OR Apache-2.0"
+readme = "README.md"
+
+exclude = [".gitignore", ".github/"]
+
+[[example]]
+name = "sync"
+path = "examples/sync/sync.rs"
+dev-dependencies = ["rand"]
+
+[[example]]
+name = "async"
+path = "examples/async/async.rs"
+dev-dependencies = ["tokio", "rand"]
+
+[dev-dependencies]
+rand = "0.8.5"
+tokio = { version = "1.22.0", features = ["full"] }
