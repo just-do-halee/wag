@@ -31,7 +31,7 @@ use wag::WaitGroup;
 ```rust
 let wg = WaitGroup::new();
 
-wg.adds::<10>().for_each(|child| {
+wg.adds_iter::<10>().for_each(|child| {
 
     thread::spawn(move || {
         // ...

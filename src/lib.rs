@@ -15,7 +15,10 @@ impl WaitGroup {
     pub fn add(&self) -> WaitChild {
         WaitChild(self.0.clone())
     }
-    pub fn adds<const N: usize>(&self) -> impl Iterator<Item = WaitChild> + '_ {
+    pub fn adds<const N: usize>(&self) -> [WaitChild; N] {
+        [(); N].map(|_| self.add())
+    }
+    pub fn adds_iter<const N: usize>(&self) -> impl Iterator<Item = WaitChild> + '_ {
         (0..N).map(|_| self.add())
     }
     pub fn wait(self) {
@@ -58,7 +61,7 @@ mod tests {
     #[test]
     fn it_works() {
         let wg = WaitGroup::new();
-        wg.adds::<10>().enumerate().for_each(|(i, child)| {
+        wg.adds_iter::<10>().enumerate().for_each(|(i, child)| {
             thread::spawn(move || {
                 let duration = rand::thread_rng().gen_range(0..500);
                 thread::sleep(Duration::from_millis(duration));
@@ -72,7 +75,7 @@ mod tests {
     #[tokio::test]
     async fn it_works_async() {
         let wg = WaitGroup::new();
-        wg.adds::<10>().enumerate().for_each(|(i, child)| {
+        wg.adds_iter::<10>().enumerate().for_each(|(i, child)| {
             tokio::spawn(async move {
                 let duration = rand::thread_rng().gen_range(0..500);
                 tokio::time::sleep(Duration::from_millis(duration)).await;
