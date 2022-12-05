@@ -1,3 +1,4 @@
+use std::hint;
 use std::sync::Arc;
 
 pub struct WaitChild(Arc<()>);
@@ -22,10 +23,8 @@ impl WaitGroup {
         (0..N).map(|_| self.add())
     }
     pub fn wait(self) {
-        use std::{thread::sleep, time::Duration};
-
         while Arc::strong_count(&self.0) > 1 {
-            sleep(Duration::from_millis(1));
+            hint::spin_loop();
         }
     }
     pub async fn async_wait(self) {

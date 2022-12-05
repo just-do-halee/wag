@@ -19,7 +19,7 @@ Go like sync.WaitGroup implementation in Rust. (sync/async)
 | [Examples](./tests/) | [Docs](https://docs.rs/wag) | [Latest Note](./CHANGELOG.md) |
 
 ```toml
-wag = "0.2.0"
+wag = "0.3.0"
 ```
 
 ## **`How to use,`**
