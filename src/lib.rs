@@ -51,38 +51,3 @@ impl Future for WaitFuture {
         }
     }
 }
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use rand::prelude::*;
-    use std::{thread, time::Duration};
-
-    #[test]
-    fn it_works() {
-        let wg = WaitGroup::new();
-        wg.adds_iter::<10>().enumerate().for_each(|(i, child)| {
-            thread::spawn(move || {
-                let duration = rand::thread_rng().gen_range(0..500);
-                thread::sleep(Duration::from_millis(duration));
-                println!("sleep:{duration}, {i}");
-                child.done();
-            });
-        });
-        wg.wait();
-    }
-
-    #[tokio::test]
-    async fn it_works_async() {
-        let wg = WaitGroup::new();
-        wg.adds_iter::<10>().enumerate().for_each(|(i, child)| {
-            tokio::spawn(async move {
-                let duration = rand::thread_rng().gen_range(0..500);
-                tokio::time::sleep(Duration::from_millis(duration)).await;
-                println!("async sleep:{duration}, {i}");
-                child.done();
-            });
-        });
-        wg.async_wait().await;
-    }
-}

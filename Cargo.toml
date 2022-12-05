@@ -14,16 +14,6 @@ readme = "README.md"
 
 exclude = [".gitignore", ".github/"]
 
-[[example]]
-name = "sync"
-path = "examples/sync/sync.rs"
-dev-dependencies = ["rand"]
-
-[[example]]
-name = "async"
-path = "examples/async/async.rs"
-dev-dependencies = ["tokio", "rand"]
-
 [dev-dependencies]
 rand = "0.8.5"
 tokio = { version = "1.22.0", features = ["full"] }

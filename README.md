@@ -16,7 +16,7 @@ Go like sync.WaitGroup implementation in Rust. (sync/async)
 [crates-url]: https://crates.io/crates/wag
 [license-url]: https://github.com/just-do-halee/wag
 
-| [Examples](./examples/) | [Docs](https://docs.rs/wag) | [Latest Note](./CHANGELOG.md) |
+| [Examples](./tests/) | [Docs](https://docs.rs/wag) | [Latest Note](./CHANGELOG.md) |
 
 ```toml
 wag = "0.1.0"
@@ -26,25 +26,11 @@ wag = "0.1.0"
 
 ```rust
 use wag::WaitGroup;
+
+let wg = WaitGroup::new();
 ```
 
 ```rust
-let wg = WaitGroup::new();
-
-wg.adds_iter::<10>().for_each(|child| {
-
-    thread::spawn(move || {
-        // ...
-        child.done();
-    });
-
-});
-wg.wait(); // or wg.async_wait().await;
-```
-
-```rust
-let wg = WaitGroup::new();
-
 for _ in 0..10 {
     let w = wg.add();
 
@@ -56,3 +42,49 @@ for _ in 0..10 {
 });
 wg.wait(); // or wg.async_wait().await;
 ```
+
+```rust
+for w in wg.adds::<10>() {
+
+    thread::spawn(move || {
+        // ...
+        w.done();
+    });
+
+});
+wg.wait(); // or wg.async_wait().await;
+```
+
+```rust
+let [w1, w2, w3] = wg.adds();
+
+thread::spawn(move || {
+    // ...
+    w1.done();
+});
+
+thread::spawn(move || {
+    // ...
+    w2.done();
+});
+
+thread::spawn(move || {
+    // ...
+    w3.done();
+});
+
+wg.wait(); // or wg.async_wait().await;
+```
+
+```rust
+wg.adds_iter::<10>().enumerate().for_each(|(i, w)| {
+
+    thread::spawn(move || {
+        // ... with i
+        w.done();
+    });
+
+});
+wg.wait(); // or wg.async_wait().await;
+```
+
